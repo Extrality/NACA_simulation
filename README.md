@@ -39,5 +39,6 @@ Some of the parameters contained in the ```params.yaml``` file are for the mesh 
 - ```y_h```: Heigth of the first cell of the boundary layer 
 - ```y_hd```: Heigth of the furthest first cell of the trail (at vertex 1 in the scheme)
 - ```x_h```: Width of the smallest cell at the leading edge (at vertex 8 in the scheme)
-- ```y_exp```: Expansion ration in the y-direction
-- ```x_exp```: Expansion ration in the x-direction on the airfoil (edge between vertices 8 and 11)
+- ```y_exp```: Expansion ratio in the y-direction
+- ```x_exp```: Expansion ratio in the x-direction on the airfoil (edge between vertices 8 and 11)
+- ```x_expd```: Expansion ratio in the x-direction behind the airfoil (edge between vertices 1 and 10)
