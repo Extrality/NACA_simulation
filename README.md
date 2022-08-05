@@ -33,4 +33,11 @@ Those scripts have been used to generate the AirfRANS dataset proposed at the Ne
 This script can be re-used to run multiple new random simulations.
 
 # Mesh parameters
-![Mesh scheme](https://github.com/Extrality/NACA_simulation/blob/main/mesh_scheme.pdf?raw=true)
+The mesh is generated with the blockMesh utility available in the OpenFOAM suite. The block definition is given in the following ![scheme](https://github.com/Extrality/NACA_simulation/blob/main/mesh_scheme.pdf?raw=true).
+Some of the parameters contained in the ```params.yaml``` file are for the mesh generation. Parameters are defined as:
+- ```L```: Size of the domain in meters
+- ```y_h```: Heigth of the first cell of the boundary layer 
+- ```y_hd```: Heigth of the furthest first cell of the trail (at vertex 1 in the scheme)
+- ```x_h```: Width of the smallest cell at the leading edge (at vertex 8 in the scheme)
+- ```y_exp```: Expansion ration in the y-direction
+- ```x_exp```: Expansion ration in the x-direction on the airfoil (edge between vertices 8 and 11)
