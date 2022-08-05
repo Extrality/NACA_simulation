@@ -2,7 +2,7 @@
 In this repository, you will find different python scripts to run incompressible or compressible Reynolds-Averaged-Simulations over NACA airfoils.
 
 # Requirements
-- OpenFOAM v2112 (You can install it by following those [instructions](https://develop.openfoam.com/Development/openfoam/-/wikis/precompiled/debian) for Ubuntu)
+- OpenFOAM v2112 (You can install it by following those [instructions](https://develop.openfoam.com/Development/openfoam/-/wikis/precompiled/debian) for Ubuntu, do not forget to update your .bashrc file to automatically run OpenFOAM when launching a terminal)
 - Python 3.9.12
 - NumPy 1.23.1
 - PyYAML 6.0
