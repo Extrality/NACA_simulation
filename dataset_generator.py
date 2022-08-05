@@ -1,3 +1,4 @@
+import yaml
 import numpy as np
 import metrics
 from simulation_generator import simulation
@@ -36,17 +37,8 @@ design_space_shuffle = []
 for i in range(len(design_space)):
     design_space_shuffle.append(design_space[index[i]])
 
-params = dict()
-params['L'] = 200 # Size of the domain.
-params['y_h'] = 2e-6 # Heigth of the first cell of the boundary layer.
-params['y_hd'] = 1e-4 # Heigth of the furthest first cell of the trail. 
-params['x_h'] = 1e-5 # Width of the smallest cell at the leading edge.
-params['y_exp'] = 1.075 # Expansion ratio in the y-direction. (< 1.2)
-params['x_exp'] = 1.025 # Expansion ratio in the x-direction on the airfoil. (< 1.2)
-params['x_expd'] = 1.075 # Expansion ratio in the x-direction behind the airfoil. (< 1.2)
-params['turbulence'] = 'SST'
-params['compressible'] = False
-params['n_proc'] = 16
+with open('params.yaml', 'r') as f: # hyperparameters of the model
+    params = yaml.safe_load(f)
 
 for sim in design_space_shuffle:    
     params['Uinf'] = np.round(sim[0]*NU, 3) 
