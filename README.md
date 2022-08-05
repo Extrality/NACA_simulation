@@ -11,7 +11,20 @@ In this repository, you will find different python scripts to run incompressible
 # Simulation
 To launch a simulation, enter your parameters in the ```params.yaml``` file and run:
 ```
-python main.py
+python main.py -i 0 -g 1 -v 1 -f 1
+```
+
+# Usage
+```usage: main.py [-h] [-i INIT] [-g GRADIENT] [-v VTK] [-f FIGURE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i INIT, --init INIT  Only generate the mesh (default: 0)
+  -g GRADIENT, --gradient GRADIENT
+                        Compute the term of the RANS equations as a post-processing (default: 0)
+  -v VTK, --vtk VTK     Generate the VTK files from the simulation (default: 1)
+  -f FIGURE, --figure FIGURE
+                        Save an image of the airfoil in the simulation folder (default: 1)
 ```
 
 # Dataset
