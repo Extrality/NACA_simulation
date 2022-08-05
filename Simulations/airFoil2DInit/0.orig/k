@@ -1,0 +1,44 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2112                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      k;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];
+
+field		0; // 0.001*Uinf^2/Re_L, Re_L : Reynolds number computed with L the size of the computational domain and Uinf
+
+internalField	uniform $field; 
+
+boundaryField
+{
+	aerofoil
+	{
+		type		fixedValue;
+		value		uniform 0;
+	}	
+	
+	freestream
+	{
+		type			freestream;
+		freestreamValue	uniform $field;
+	}
+
+	frontAndBack
+	{
+		type		empty;
+	}
+}
+
+
+// ************************************************************************* //

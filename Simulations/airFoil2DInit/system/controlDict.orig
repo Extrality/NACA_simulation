@@ -1,0 +1,202 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2112                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Uinf		50;
+
+application     simpleFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         10000;
+
+deltaT          1;
+
+writeControl    timeStep;
+
+writeInterval   $endTime;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression on;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+functions
+{
+	forces_object
+	{
+	    type forces;
+	    libs ("libforces.so");
+
+	    enabled true;
+
+	    writeControl   timeStep;
+	    writeInterval  $endTime;
+
+	    patches ("aerofoil");
+
+	    p		p;
+	    U		U;
+	    rho	rhoInf;
+
+	    //// Density only for incompressible flows
+	    rhoInf 1.184;
+	    
+	    //// Centre of rotation
+	    CofR (0 0 0);
+	}
+	
+	forceCoeffs1
+	{
+	    // Mandatory entries
+	    type            forceCoeffs;
+	    libs            ("libforces.so");
+	    patches         ("aerofoil");
+
+
+	    // Optional entries
+
+	    // Field names
+	    p		p;
+	    U		U;
+	    rho	rhoInf;
+	    
+	    ////Density only for incompressible flows
+	    rhoInf 1.184;
+
+	    // Reference pressure [Pa]
+	    pRef            0;
+
+	    // Include porosity effects?
+	    porosity        no;
+
+	    // Store and write volume field representations of forces and moments
+	    writeFields     yes;
+	    writeControl    timeStep;
+	    writeInterval   $endTime;
+
+	    // Centre of rotation for moment calculations
+	    CofR            (0 0 0);
+
+	    // Lift direction
+	    liftDir	     (0 1 0);
+
+	    // Drag direction
+	    dragDir	     (1 0 0);
+
+	    // Pitch axis
+	    pitchAxis       (0 0 1);
+
+	    // Freestream velocity magnitude [m/s]
+	    magUInf         $Uinf;
+
+	    // Reference length [m]
+	    lRef            1;
+
+	    // Reference area [m2]
+	    Aref            1;
+
+	    // Spatial data binning
+	    // - extents given by the bounds of the input geometry
+	    /*binData
+	    {
+		nBin        20;
+		direction   (1 0 0);
+		cumulative  yes;
+	    }*/
+	}
+
+    momErr
+    {
+        type            momentumError;
+        libs            (fieldFunctionObjects);
+        executeControl  writeTime;
+        writeControl    writeTime;
+    }
+
+    contErr
+    {
+        type            div;
+        libs            (fieldFunctionObjects);
+        field           phi;
+        executeControl  writeTime;
+        writeControl    writeTime;
+    }
+
+
+    turbulenceFields1
+    {
+        type            turbulenceFields;
+        libs            (fieldFunctionObjects);
+        fields
+        (
+            R
+            I
+            L
+            k
+            epsilon
+            omega
+            nut
+            nuEff
+            devReff
+        );
+
+        executeControl  writeTime;
+        writeControl    writeTime;
+    }
+
+   yplus
+   {
+	type		yPlus;
+	libs		(fieldFunctionObjects);
+
+	enabled	true;
+	executeControl	writeTime;
+	writeControl	writeTime;
+   }
+   
+   wallshearstress
+   {
+   	type		wallShearStress;
+   	libs		(fieldFunctionObjects);
+   	
+   	executeControl	writeTime;
+   	writeControl	writeTime;
+   }
+   
+   mach
+   {
+   	type		MachNo;
+   	libs		(fieldFunctionObjects);
+   	
+   	executeControl	writeTime;
+   	writeControl	writeTime;
+   }
+}
+
+
+// ************************************************************************* //

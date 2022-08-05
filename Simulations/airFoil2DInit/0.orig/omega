@@ -1,0 +1,43 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2112                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      omega;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 -1 0 0 0 0];
+
+field		0; // 5*Uinf/L, L: size of the computational domain
+
+internalField   uniform $field; 
+
+boundaryField
+{
+	aerofoil
+	{
+		type		omegaWallFunction;
+		value		uniform 0; // 6*nu/(0.075*y_1^2), y_1 : height of the first wall cell
+	}
+	
+	freestream
+	{
+		type			freestream;
+		freestreamValue	uniform $field;
+	}
+
+	frontAndBack
+	{
+		type		empty;
+	}
+}
+
+// ************************************************************************* //

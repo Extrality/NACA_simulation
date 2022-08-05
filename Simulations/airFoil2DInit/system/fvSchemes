@@ -1,0 +1,84 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2112                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default         steadyState;
+}
+
+gradSchemes
+{
+    default         Gauss linear;
+    
+    // Spalart-Allmaras
+    grad(nuTilda)   cellLimited Gauss linear 1;
+    
+    // k-omega SST
+    grad(k)         cellLimited Gauss linear 1;
+    grad(omega)     cellLimited Gauss linear 1;
+    
+    // Compressible
+    grad(e)         cellLimited Gauss linear 1;
+    grad(K)         cellLimited Gauss linear 1;
+    grad(Ekp)       cellLimited Gauss linear 1;
+}
+
+divSchemes
+{
+    default          Gauss linear;
+
+    div(phi,U)       bounded Gauss linearUpwind grad(U);
+
+    // Spalart-Allmaras
+    div(phi,nuTilda) bounded Gauss linearUpwind grad(nuTilda);
+    
+    // k-omega SST
+    div(phi,k)       bounded Gauss linearUpwind grad(k);
+    div(phi,omega)   bounded Gauss linearUpwind grad(omega);
+    
+    // Incompressible
+    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+    
+    // Compressible
+    div(phi,e)       bounded Gauss linearUpwind grad(e);
+    div(phi,K)       bounded Gauss linearUpwind grad(K);
+    div(phi,Ekp)     bounded Gauss linearUpwind grad(Ekp);
+    div(((rho*nuEff)*dev2(T(grad(U)))))    Gauss linear;
+}
+
+laplacianSchemes
+{
+    default         Gauss linear limited 1;
+}
+
+interpolationSchemes
+{
+    default         linear;
+}
+
+snGradSchemes
+{
+    default         limited 1;
+}
+
+wallDist
+{
+    method          meshWave;
+    correctWalls    true;
+}
+
+
+// ************************************************************************* //
