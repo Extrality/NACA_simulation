@@ -4,9 +4,10 @@ y_hd: 1.e-4 # Heigth of the furthest first cell of the trail.
 x_h: 1.e-5 # Width of the smallest cell at the leading edge.
 y_exp: 1.075 # Expansion ratio in the y-direction. (< 1.2)
 x_exp: 1.025 # Expansion ratio in the x-direction on the airfoil. (< 1.2)
+x_expd: 1.075 # Expansion ratio in the x-direction behind the airfoil. (< 1.2)
 turbulence: 'SST' # Turbulence model, choose between 'SST' for k-omega SST and 'SA' for Spalart-Allmaras.
 compressible: False # If you run compressible simulation, be careful that compressible simulation are less stable and could not converge without finetuning.
-n_proc: 16 # Number of physical CPU cores used for the simulation.
+n_proc: 2 # Number of physical CPU cores used for the simulation.
 reynolds: 4.e+6 # Reynolds number of the simulation.
 aoa: 5 # Angle of attack of the simulation.
 digits: [4, 4, 12] # 4 or 5-digits of the airfoil. The last two digits are given together as it is the thickness of the airfoil.
