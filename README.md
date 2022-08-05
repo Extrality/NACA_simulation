@@ -33,4 +33,4 @@ Those scripts have been used to generate the AirfRANS dataset proposed at the Ne
 This script can be re-used to run multiple new random simulations.
 
 # Mesh parameters
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![Mesh scheme](https://github.com/Extrality/NACA_simulation/blob/main/mesh_scheme.pdf?raw=true)
