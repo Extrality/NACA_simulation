@@ -15,7 +15,8 @@ python main.py -i 0 -g 1 -v 1 -f 1
 ```
 
 ## Usage
-```usage: main.py [-h] [-i INIT] [-g GRADIENT] [-v VTK] [-f FIGURE]
+```
+usage: main.py [-h] [-i INIT] [-g GRADIENT] [-v VTK] [-f FIGURE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -44,7 +45,8 @@ Some of the parameters contained in the ```params.yaml``` file are for the mesh 
 - ```x_expd```: Expansion ratio in the x-direction behind the airfoil (edge between vertices 1 and 10)
 
 ## Citation
-```@inproceedings{
+```
+@inproceedings{
 bonnet2022airfrans,
 title={Airf{RANS}: High Fidelity Computational Fluid Dynamics Dataset for Approximating Reynolds-Averaged Navier{\textendash}Stokes Solutions},
 author={Florent Bonnet and Jocelyn Ahmed Mazari and Paola Cinnella and Patrick Gallinari},
