@@ -423,12 +423,12 @@ def simulation(init_path, path, params, just_init = False, figure = False, compu
         VTK (bool, optional): If ``True``, generate VTK files from the simulation. Default: ``False``
     '''
     Re, Ma = params['Uinf']/NU, params['Uinf']/C
-    print('Reynolds number: {0:.3},\
-        \nMach number: {1:.3},\
-        \nUinf: {2:.3},\
-        \nAoA: {3:.3},\
+    print('Reynolds number: {0:.3}\
+        \nMach number: {1:.3}\
+        \nUinf: {2:.3}\
+        \nAoA: {3:.3}\
         \nNACA:'.format(Re, Ma, float(params['Uinf']), float(params['aoa'])), str(params['digits']),
-        '\nTurbulence model: ' + params['turbulence'] + '\nCompressible: ' + str(params['compressible']) + '.')
+        '\nTurbulence model: ' + params['turbulence'] + '\nCompressible: ' + str(params['compressible']) + '\n')
 
     if os.path.exists(path):
         shutil.rmtree(path)
@@ -459,7 +459,7 @@ def simulation(init_path, path, params, just_init = False, figure = False, compu
     subprocess.run('checkMesh > log.checkMesh', shell = True)
     open(params['turbulence'] + '_' + str(params['Uinf']) + '_' + str(params['aoa']) + '_' + str(params['digits']) + '.foam', 'w')
     if just_init:
-        print('Initialization done!')
+        print('\nInitialization done!')
     
     else:
         print('Simulation running.')
@@ -495,7 +495,10 @@ def simulation(init_path, path, params, just_init = False, figure = False, compu
                 os.remove(str(params['n_iter']) + '/' + file)
         if VTK:
             print('Generating VTK.')
-            subprocess.run("foamToVTK -noZero -fields '(p U nut)' > log.foamToVTK", shell = True)
-        print('Simulation done!')
+            if params['compressible']:
+                subprocess.run("foamToVTK -noZero -fields '(p U T rho nut wallShearStress Ma)' > log.foamToVTK", shell = True)
+            else:
+                subprocess.run("foamToVTK -noZero -fields '(p U nut wallShearStress)' > log.foamToVTK", shell = True)
+        print('\nSimulation done!')
 
     os.chdir(wd)
