@@ -431,7 +431,8 @@ def simulation(init_path, path, params, just_init = False, figure = False, compu
         \nMach number: {1:.3}\
         \nUinf: {2:.3}\
         \nAoA: {3:.3}\
-        \nNACA:'.format(Re, Ma, float(params['Uinf']), float(params['aoa'])), str(params['digits']),
+        \nTemperature: {4:.3}\
+        \nNACA:'.format(Re, Ma, float(params['Uinf']), float(params['aoa']), float(params['temperature'])), str(params['digits']),
         '\nTurbulence model: ' + params['turbulence'] + '\nCompressible: ' + str(params['compressible']) + '\n')
 
     if os.path.exists(path):

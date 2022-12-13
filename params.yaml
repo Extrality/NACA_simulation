@@ -11,5 +11,5 @@ n_proc: 16 # Number of physical CPU cores used for the simulation.
 reynolds: 3.e+6 # Reynolds number of the simulation.
 temperature: 298.15 # Temperature of air for the simulation in Kelvin.
 aoa: 0 # Angle of attack of the simulation.
-digits: [4, 4, 12] # 4 or 5-digits of the airfoil. The last two digits are given together as it is the thickness of the airfoil.
+digits: [0, 0, 12] # 4 or 5-digits of the airfoil. The last two digits are given together as it is the thickness of the airfoil.
 n_iter: 20000 # Number of iterations for the simulation (it can be raised to 40000 for high angle of attack (> 10) simulations).
