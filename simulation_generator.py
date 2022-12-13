@@ -1,5 +1,6 @@
 import numpy as np
 import os, shutil, glob
+import yaml
 import subprocess
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -7,9 +8,12 @@ from naca_generator import naca_generator
 
 sns.set()
 
-# Properties of air at sea level and 293.15K 
-NU = 1.56e-5
-C = 343.2
+with open('params.yaml', 'r') as f: # hyperparameters of the model
+    params = yaml.safe_load(f)
+
+# Properties of air at 1.01325hPa
+NU = -3.400747e-6 + 3.452139e-8*params['temperature'] + 1.00881778e-10*params['temperature']**2 - 1.363528e-14*params['temperature']**3
+C = 20.05*np.sqrt(params['temperature'])
 
 def angle_to_origin(a, b, alpha):
     c = b - a

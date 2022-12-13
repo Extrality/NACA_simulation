@@ -1,14 +1,18 @@
 import numpy as np
+import yaml
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 sns.set()
 
-# Properties of air at sea level and 298.15K
-RHO = 1.184
-NU = 1.56e-5
-C = 346.1
-P_ref = 1.013e5
+with open('params.yaml', 'r') as f: # hyperparameters of the model
+    params = yaml.safe_load(f)
+
+# Properties of air at 1.01325hPa
+P_ref = 1.01325e5
+RHO = 1.293*273.15/params['temperature']
+NU = -3.400747e-6 + 3.452139e-8*params['temperature'] + 1.00881778e-10*params['temperature']**2 - 1.363528e-14*params['temperature']**3
+C = 20.05*np.sqrt(params['temperature'])
 
 def surface_coefficients(airfoil, params, sorted = True):
     qInf = 0.5*params['Uinf']**2

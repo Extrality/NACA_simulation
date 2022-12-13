@@ -6,8 +6,11 @@ from simulation_generator import simulation
 # Global path where the airFoil2DInit folder is and where the simulations are gonna be done.
 glob_path = 'Simulations/'
 
-# Properties of air at sea level and 298.5K
-NU = 1.56e-5
+with open('params.yaml', 'r') as f: # hyperparameters of the model
+    params = yaml.safe_load(f)
+
+# Properties of air at 1.01325hPa
+NU = -3.400747e-6 + 3.452139e-8*params['temperature'] + 1.00881778e-10*params['temperature']**2 - 1.363528e-14*params['temperature']**3
 
 n = 5 # Size of the dataset is 2n
 Reynolds = np.random.uniform(2, 6, 2*n)*1e6
@@ -36,9 +39,6 @@ np.random.shuffle(index)
 design_space_shuffle = []
 for i in range(len(design_space)):
     design_space_shuffle.append(design_space[index[i]])
-
-with open('params.yaml', 'r') as f: # hyperparameters of the model
-    params = yaml.safe_load(f)
 
 for sim in design_space_shuffle:    
     params['Uinf'] = np.round(sim[0]*NU, 3) 
