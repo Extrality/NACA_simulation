@@ -9,8 +9,9 @@ with open('params.yaml', 'r') as f: # hyperparameters of the model
     params = yaml.safe_load(f)
 
 # Properties of air at 1.01325hPa
+MOL = 28.965338 # Molar weight in g/mol
 P_ref = 1.01325e5
-RHO = 1.293*273.15/params['temperature']
+RHO = P_ref*MOL*1e-3/(8.3144621*params['temperature'])
 NU = -3.400747e-6 + 3.452139e-8*params['temperature'] + 1.00881778e-10*params['temperature']**2 - 1.363528e-14*params['temperature']**3
 C = 20.05*np.sqrt(params['temperature'])
 

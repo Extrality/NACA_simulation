@@ -12,8 +12,12 @@ with open('params.yaml', 'r') as f: # hyperparameters of the model
     params = yaml.safe_load(f)
 
 # Properties of air at 1.01325hPa
+MOL = 28.965338 # Molar weight in g/mol
+P_ref = 1.01325e5
+RHO = P_ref*MOL*1e-3/(8.3144621*params['temperature'])
 NU = -3.400747e-6 + 3.452139e-8*params['temperature'] + 1.00881778e-10*params['temperature']**2 - 1.363528e-14*params['temperature']**3
 C = 20.05*np.sqrt(params['temperature'])
+C_P = 1.0575e3 - 4.4890e-1*params['temperature'] + 1.1407e-3*params['temperature']**2 - 7.9999e-7*params['temperature']**3 + 1.9327e-10*params['temperature']**4
 
 def angle_to_origin(a, b, alpha):
     c = b - a
@@ -295,6 +299,8 @@ def system_generator(path, u_inf, aoa, n_proc, n_iter = 10000, compressible = Fa
 
     line_list[15] = 'Uinf\t' + str(u_inf) + ';'
     line_list[25] = 'endTime\t' + str(n_iter) + ';'
+    line_list[66] = '\t    rhoInf\t' + str(RHO) + ';'
+    line_list[88] = '\t    rhoInf\t' + str(RHO) + ';'
     line_list[105] = '\t    liftDir\t     (' + str(-a[1]) + ' ' + str(a[0]) + ' 0);'
     line_list[108] = '\t    dragDir\t     (' + str(a[0]) + ' ' + str(a[1]) + ' 0);'        
 
@@ -302,7 +308,7 @@ def system_generator(path, u_inf, aoa, n_proc, n_iter = 10000, compressible = Fa
         line_list[17] = 'application     rhoSimpleFoam;' # Change solver
         line_list[63] = '	    rho\trho;' # Add density for integral forces computation
         line_list[85] = '	    rho\trho;' # Add density for force coeffs computation
-        line_list[91] = '\t    pRef            1.013e5;' # Absolute pressure for compressible simulation
+        line_list[91] = '\t    pRef            ' + str(P_ref) + ';' # Absolute pressure for compressible simulation
         line_list[162] = '            mut'
         line_list[163] = '            muEff'
         line_list[164] = '            devRhoReff'
@@ -350,17 +356,43 @@ def init_generator(path, u_inf, aoa, L, turbulence, y_1 = None, compressible = F
     with open(path + '0/U', 'w') as file:
         for line in line_list:
             file.write(line + '\n')
+    
+    with open(path + 'constant/transportProperties', 'r') as file:
+        line_list = file.read().splitlines()
+    line_list[18] = 'nu\t\t' + str(NU) + ';'
+    with open(path + 'constant/transportProperties', 'w') as file:
+        for line in line_list:
+            file.write(line +'\n')
 
     if turbulence == 'SA':
+        nut = NU
+        nutilda = 4*NU
+
         with open(path + 'constant/turbulenceProperties', 'r') as file:
             line_list_turb = file.read().splitlines()
 
         line_list_turb[20] = '\tRASModel\tSpalartAllmaras;'
+
+        with open(path + '0/nut', 'r') as file:
+            line_list = file.read().splitlines()
+        line_list[18] = 'field\t\t' + str(nut) + ';'
+        with open(path + '0/nut', 'w') as file:
+            for line in line_list:
+                file.write(line +'\n')
+        
+        with open(path + '0/nuTilda', 'r') as file:
+            line_list = file.read().splitlines()
+        line_list[18] = 'field\t\t' + str(nutilda) + ';'
+        with open(path + '0/nuTilda', 'w') as file:
+            for line in line_list:
+                file.write(line +'\n')
+
         os.remove(path + '0/k')
         os.remove(path + '0/omega')
     
     elif turbulence == 'SST':
         if isinstance(y_1, float):
+            nut = NU
             Re_L = u_inf*L/NU
             k = 1e-3*u_inf**2/Re_L
             omega = 5*u_inf/L
@@ -370,6 +402,13 @@ def init_generator(path, u_inf, aoa, L, turbulence, y_1 = None, compressible = F
                 line_list_turb = file.read().splitlines()
 
             line_list_turb[20] = '\tRASModel\tkOmegaSST;'
+
+            with open(path + '0/nut', 'r') as file:
+                line_list = file.read().splitlines()
+            line_list[18] = 'field\t\t' + str(nut) + ';'
+            with open(path + '0/nut', 'w') as file:
+                for line in line_list:
+                    file.write(line +'\n')
 
             with open(path + '0/k', 'r') as file:
                 line_list = file.read().splitlines()
@@ -396,15 +435,38 @@ def init_generator(path, u_inf, aoa, L, turbulence, y_1 = None, compressible = F
             file.write(line +'\n')
     
     if compressible:
+        alphat = RHO*NU/0.85
+        temp = params['temperature']
+
+        with open(path + 'constant/thermophysicalProperties', 'r') as file:
+            line_list = file.read().splitlines()
+        line_list[37] = '\tCp\t' + str(C_P) + ';'
+        with open(path + 'constant/thermophysicalProperties', 'w') as file:
+            for line in line_list:
+                file.write(line +'\n')
+
         with open(path + '0/p', 'r') as file:
             line_list_comp = file.read().splitlines()
 
-        line_list_comp[16] = 'field           1.013e5;'
+        line_list_comp[16] = 'field           ' + str(P_ref) + ';'
         line_list_comp[18] = 'dimensions      [1 -1 -2 0 0 0 0];' # Change the dimension to the real pressure dimension.
-
         with open(path + '0/p', 'w') as file:
             for line in line_list_comp:
                 file.write(line + '\n')
+
+        with open(path + '0/alphat', 'r') as file:
+            line_list = file.read().splitlines()
+        line_list[18] = 'field\t\t' + str(alphat) + ';'
+        with open(path + '0/alphat', 'w') as file:
+            for line in line_list:
+                file.write(line +'\n')
+        
+        with open(path + '0/T', 'r') as file:
+            line_list = file.read().splitlines()
+        line_list[18] = 'field\t\t' + str(temp) + ';'
+        with open(path + '0/T', 'w') as file:
+            for line in line_list:
+                file.write(line +'\n')
         
         os.remove(path + 'constant/transportProperties')
     

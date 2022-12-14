@@ -16,7 +16,9 @@ FoamFile
 
 dimensions      [1 -1 -1 0 0 0 0];
 
-internalField   uniform 1.569984e-5; // rho*nu_t/Pr_t, rho = 1.184, nu_t = 1.56e-5, Pr_t = 0.85
+field		1.569984e-5; // rho*nu_t/Pr_t, rho = 1.184, nu_t = 1.56e-5, Pr_t = 0.85
+
+internalField   uniform $field;
 
 boundaryField
 {
@@ -30,7 +32,7 @@ boundaryField
     freestream
     {
         type            calculated;
-        value           uniform 1.569984e-5;
+        value           uniform $field;
     }
 
     frontAndBack

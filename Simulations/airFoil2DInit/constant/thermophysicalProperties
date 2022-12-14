@@ -27,11 +27,11 @@ thermoType
     energy          sensibleInternalEnergy;
 }
 
-mixture // air at 298.15 K
+mixture // air
 {
     specie
     {
-        molWeight   28.96;
+        molWeight   28.965338;
     }
     thermodynamics
     {
@@ -40,7 +40,7 @@ mixture // air at 298.15 K
     }
     transport
     {
-        As          1.458e-6;
+        As          1.457e-6;
         Ts          110.4;
     }
 }

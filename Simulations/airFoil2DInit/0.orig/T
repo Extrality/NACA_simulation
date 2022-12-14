@@ -14,11 +14,11 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-Tinlet          298.15;
-
 dimensions      [0 0 0 1 0 0 0];
 
-internalField   uniform $Tinlet;
+field          298.15;
+
+internalField   uniform $field;
 
 boundaryField
 {
@@ -30,7 +30,7 @@ boundaryField
     freestream
     {
         type                 freestream;
-        freestreamValue      uniform $Tinlet;
+        freestreamValue      uniform $field;
     }
 
     frontAndBack
