@@ -29,7 +29,7 @@ optional arguments:
 ```
 
 ## Dataset
-Those scripts have been used to generate the AirfRANS dataset proposed at the NeurIPS 2022 Datasets and Benchmarks Track conference. You can find the paper [here](https://openreview.net/forum?id=Zp8YmiQ_bDC&referrer=%5Bthe%20profile%20of%20Florent%20Bonnet%5D(%2Fprofile%3Fid%3D~Florent_Bonnet1)). In particular, the script ```dataset_generator.py``` run multiple simulations by sampling Reynolds number and Angle of Attack as explained in the associated paper.
+Those scripts have been used to generate the AirfRANS dataset proposed at the NeurIPS 2022 Datasets and Benchmarks Track conference. In particular, the script ```dataset_generator.py``` run multiple simulations by sampling Reynolds number and Angle of Attack as explained in the associated paper.
 
 This script can be re-used to run multiple new random simulations.
 
@@ -45,6 +45,9 @@ Some of the parameters contained in the ```params.yaml``` file are for the mesh 
 - ```x_expd```: Expansion ratio in the x-direction behind the airfoil (edge between vertices 1 and 10)
 
 ## Citation
+The original paper accepted at the 36th Conference on Neural Information Processing Systems (NeurIPS 2022) Track on Datasets and Benchmarks can be found [here](https://openreview.net/forum?id=Zp8YmiQ_bDC) and the preprint [here](https://arxiv.org/abs/2212.07564). **Disclaimer: An important update correcting an inconsistency in the Machine Learning experiments proposed in the main part of the NeurIPS version of the paper has been done. Please refer to the [ArXiv version](https://arxiv.org/abs/2212.07564) for the up to date version.** 
+
+Please cite this paper if you use this dataset in your own work.
 ```
 @inproceedings{
 bonnet2022airfrans,
